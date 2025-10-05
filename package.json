@@ -1,7 +1,7 @@
 {
   "name": "speach-ia",
   "version": "1.0.0",
-  "description": "Aplicación React de speech-to-speech con OpenAI",
+  "description": "React speech-to-speech application powered by OpenAI",
   "type": "module",
   "scripts": {
     "dev": "npm-run-all --parallel dev:client dev:server",

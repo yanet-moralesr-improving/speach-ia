@@ -18,11 +18,11 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 app.post('/api/speech', upload.single('audio'), async (req, res) => {
   if (!req.file) {
-    return res.status(400).json({ error: 'Archivo de audio no recibido.' });
+    return res.status(400).json({ error: 'Audio file was not received.' });
   }
 
   if (!process.env.OPENAI_API_KEY) {
-    return res.status(500).json({ error: 'La API key de OpenAI no está configurada.' });
+    return res.status(500).json({ error: 'The OpenAI API key is not configured.' });
   }
 
   try {
@@ -41,11 +41,11 @@ app.post('/api/speech', upload.single('audio'), async (req, res) => {
         {
           role: 'system',
           content:
-            'Eres un asistente conversacional en español. Responde de forma breve, amable y clara.'
+            'You are a conversational assistant in English. Respond briefly, kindly, and clearly.'
         },
         {
           role: 'user',
-          content: userText || 'No se detectó audio.'
+          content: userText || 'No audio was detected.'
         }
       ],
       temperature: 0.7
@@ -56,7 +56,7 @@ app.post('/api/speech', upload.single('audio'), async (req, res) => {
     const speechResponse = await openai.audio.speech.create({
       model: 'gpt-4o-mini-tts',
       voice: 'alloy',
-      input: responseText || 'Lo siento, no pude entenderte.'
+      input: responseText || 'Sorry, I could not understand you.'
     });
 
     const audioBuffer = Buffer.from(await speechResponse.arrayBuffer());
@@ -68,9 +68,9 @@ app.post('/api/speech', upload.single('audio'), async (req, res) => {
       audioBase64
     });
   } catch (error) {
-    console.error('Error en /api/speech', error);
+    console.error('Error in /api/speech', error);
     res.status(500).json({
-      error: 'Error al comunicarse con OpenAI.',
+      error: 'Error communicating with OpenAI.',
       details: error.message
     });
   }
@@ -88,5 +88,5 @@ app.get('*', (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Servidor escuchando en http://localhost:${PORT}`);
+  console.log(`Server listening at http://localhost:${PORT}`);
 });

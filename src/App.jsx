@@ -51,7 +51,7 @@ function App() {
         try {
           setIsProcessing(true);
           const formData = new FormData();
-          formData.append('audio', audioBlob, 'grabacion.webm');
+          formData.append('audio', audioBlob, 'recording.webm');
 
           const response = await fetch(`${API_BASE_URL}/api/speech`, {
             method: 'POST',
@@ -59,7 +59,7 @@ function App() {
           });
 
           if (!response.ok) {
-            throw new Error('No se pudo procesar el audio. Intenta nuevamente.');
+            throw new Error('Unable to process the audio. Please try again.');
           }
 
           const data = await response.json();
@@ -74,7 +74,7 @@ function App() {
           }
         } catch (err) {
           console.error(err);
-          setError(err.message || 'Ocurrió un error inesperado.');
+          setError(err.message || 'An unexpected error occurred.');
         } finally {
           setIsProcessing(false);
         }
@@ -84,7 +84,7 @@ function App() {
       setIsRecording(true);
     } catch (err) {
       console.error(err);
-      setError('No se pudo acceder al micrófono. Verifica los permisos del navegador.');
+      setError('Microphone access failed. Check your browser permissions.');
     }
   }, []);
 
@@ -100,17 +100,17 @@ function App() {
   return (
     <div className="app-container">
       <header className="app-header">
-        <h1>Speach IA</h1>
+        <h1>Speach AI</h1>
         <p>
-          Haz una pregunta hablando con tu micrófono. El asistente de OpenAI
-          responderá con voz.
+          Ask your question using the microphone. The OpenAI assistant will
+          answer with a voice reply.
         </p>
       </header>
 
       <main className="card">
         <section className="controls">
           {!supportsRecording && (
-            <p className="error">Tu navegador no soporta captura de audio.</p>
+            <p className="error">Your browser does not support audio capture.</p>
           )}
 
           <button
@@ -119,23 +119,23 @@ function App() {
             onClick={handleToggleRecording}
             disabled={!supportsRecording || isProcessing}
           >
-            {isRecording ? 'Detener grabación' : 'Comenzar a hablar'}
+            {isRecording ? 'Stop recording' : 'Start speaking'}
           </button>
 
-          {isProcessing && <p className="status">Procesando tu audio…</p>}
+          {isProcessing && <p className="status">Processing your audio…</p>}
         </section>
 
         <section className="results">
           {transcript && (
             <div className="result-block">
-              <h2>Lo que dijiste</h2>
+              <h2>What you said</h2>
               <p>{transcript}</p>
             </div>
           )}
 
           {aiResponse && (
             <div className="result-block">
-              <h2>Respuesta del asistente</h2>
+              <h2>Assistant response</h2>
               <p>{aiResponse}</p>
               {audioSrc && (
                 <audio controls src={audioSrc} className="player" />
@@ -153,15 +153,15 @@ function App() {
             onClick={resetConversation}
             disabled={isProcessing}
           >
-            Limpiar
+            Clear
           </button>
         )}
       </main>
 
       <footer className="app-footer">
         <p>
-          Necesitas configurar la variable <code>OPENAI_API_KEY</code> en el
-          servidor para habilitar la conversación.
+          You must set the <code>OPENAI_API_KEY</code> variable on the server to
+          enable the conversation.
         </p>
       </footer>
     </div>
