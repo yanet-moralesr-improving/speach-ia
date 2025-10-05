@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import multer from 'multer';
 import dotenv from 'dotenv';
-import { OpenAI } from 'openai';
+import { OpenAI, toFile } from 'openai';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
@@ -26,8 +26,14 @@ app.post('/api/speech', upload.single('audio'), async (req, res) => {
   }
 
   try {
+    const audioFile = await toFile(
+      req.file.buffer,
+      req.file.originalname ?? 'audio.webm',
+      { type: req.file.mimetype }
+    );
+
     const transcription = await openai.audio.transcriptions.create({
-      file: { data: req.file.buffer, name: req.file.originalname || 'audio.webm' },
+      file: audioFile,
       model: 'gpt-4o-mini-transcribe',
       response_format: 'verbose_json',
       temperature: 0.2
